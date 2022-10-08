@@ -10,7 +10,7 @@
   </a>
 </p>
 
-Here you can find secure scraping using Puppeteer for different Linkedin actions
+Here you can find tutorials for secure scraping using Puppeteer for different Linkedin actions
 - [x] Login
 - [x] Scrape profiles: Sales Nav / Normal
 - [x] Connection Request
