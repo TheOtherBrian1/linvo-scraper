@@ -11,14 +11,14 @@
 </p>
 
 Here you can find tutorials for secure scraping using Puppeteer for different Linkedin actions
-- [x] Login
-- [x] Scrape profiles: Sales Nav / Normal
-- [x] Connection Request
-- [x] Follow message
-- [x] Endorse Profile
-- [x] Visit Profile
-- [x] Like posts
-- [x] Random Engagement
+- [x] <a href = "./tutorials/login"> Login </a>
+- [x] <a href = "./tutorials/scrape_profiles"> Scrape profiles: Sales Nav / Normal </a>
+- [x] <a href = "./tutorials/connection_request"> Connection Request </a>
+- [x] <a href = "./tutorials/follow_message"> Follow message </a>
+- [x] <a href = "./tutorials/endorse_profile"> Endorse Profile </a>
+- [x] <a href = "./tutorials/visit_profile"> Visit Profile </a>
+- [x] <a href = "./tutorials/like_posts"> Like posts </a>
+- [x] <a href = "./tutorials/random_engagement"> Random Engagement </a>
 
 ## Install
 
@@ -71,6 +71,78 @@ Any contribution is welcomed!
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/linvo-io/linvo-scraper/issues).
+
+## Repository Structure
+<ul>
+  <li>
+    <em>dist</em>: minimized production code
+    <ul>
+      <li>
+        sub-folders
+      </li>
+    </ul>
+  </li>
+  <li>
+    <em>lib</em>: development code
+    <ul>
+      <li>
+        <em>enums</em>: defines enums
+      </li>
+      <li>
+        <em>helpers</em>: defines helper classes, functions, and variables
+      </li>
+      <li>
+        <em>linkedin</em>: primary services to automate puppeteer
+      </li>
+    </ul>
+    <li>
+      linkedin.service.ts: bundles and exports all services as a combined object for use 
+    </li>
+  </li>
+  <li>
+    .gitignore: stops git from tracking certain files and directories
+  </li>
+  <li>
+    CODE_OF_CONDUCT.md: defines community rules for contributors
+  </li>
+  <li>
+    LICENSE: terms of service agreement
+  </li>
+  <li>
+    package-lock.json: lists dependencies' dependencies
+  </li>
+  <li>
+    package-lock.json: outlines dependencies and their exact version used for this project
+  </li>
+  <li>
+    package.json: outlines dependencies used in this project
+  </li>
+  <li>
+    README.md: introductory document for curious users
+  </li>
+  <li>
+    tsconfig.json: TypeScript compilation configuration file
+  </li>
+</ul>
+
+```
+LINVO-SCRAPER (project)
+│   README.md
+│   file001.txt    
+│
+└───folder1
+│   │   file011.txt
+│   │   file012.txt
+│   │
+│   └───subfolder1
+│       │   file111.txt
+│       │   file112.txt
+│       │   ...
+│   
+└───folder2
+    │   file021.txt
+    │   file022.txt
+```
 
 ## 📝 License
 
