@@ -1,11 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkedinAcceptedConnectionsService = void 0;
-const linkedin_abstract_service_1 = require("./linkedin.abstract.service");
-const gotoUrl_1 = require("../helpers/gotoUrl");
-class LinkedinAcceptedConnectionsService extends linkedin_abstract_service_1.LinkedinAbstractService {
+import { LinkedinAbstractService } from "./linkedin.abstract.service";
+import { gotoUrl } from "../helpers/gotoUrl";
+export class LinkedinAcceptedConnectionsService extends LinkedinAbstractService {
     async process(page) {
-        (0, gotoUrl_1.gotoUrl)(page, "https://www.linkedin.com/mynetwork/invite-connect/connections/");
+        gotoUrl(page, "https://www.linkedin.com/mynetwork/invite-connect/connections/");
         await this.waitForLoader(page);
         try {
             await page.waitForSelector(".mn-connection-card__details", {
@@ -40,5 +37,4 @@ class LinkedinAcceptedConnectionsService extends linkedin_abstract_service_1.Lin
         });
     }
 }
-exports.LinkedinAcceptedConnectionsService = LinkedinAcceptedConnectionsService;
 //# sourceMappingURL=linkedin.accepted.connection.request.service.js.map

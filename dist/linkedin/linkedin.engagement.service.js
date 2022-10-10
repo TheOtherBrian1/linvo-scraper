@@ -1,18 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkedinEngagementService = void 0;
-const linkedin_abstract_service_1 = require("./linkedin.abstract.service");
-const gotoUrl_1 = require("../helpers/gotoUrl");
-const timer_1 = require("../helpers/timer");
-const lodash_1 = require("lodash");
-class LinkedinEngagementService extends linkedin_abstract_service_1.LinkedinAbstractService {
+import { LinkedinAbstractService } from "./linkedin.abstract.service";
+import { gotoUrl } from "../helpers/gotoUrl";
+import { timer } from "../helpers/timer";
+import { shuffle } from "lodash";
+export class LinkedinEngagementService extends LinkedinAbstractService {
     async process(page, cdp, data) {
-        (0, gotoUrl_1.gotoUrl)(page, "https://www.linkedin.com/feed/");
+        gotoUrl(page, "https://www.linkedin.com/feed/");
         await this.waitForLoader(page);
         await page.mouse.wheel({
             deltaY: 1500,
         });
-        await (0, timer_1.timer)(4000);
+        await timer(4000);
         await page.waitForFunction(() => {
             return (Array.from(document.querySelectorAll('[type="like-icon"], [type="thumbs-up-outline"]')) || [])
                 .map((curr) => {
@@ -45,15 +42,15 @@ class LinkedinEngagementService extends linkedin_abstract_service_1.LinkedinAbst
         for (const id of ids) {
             try {
                 await this.moveMouseAndScroll(page, `#${id.like}`, undefined, false, -700);
-                await (0, timer_1.timer)(1000);
+                await timer(1000);
                 await this.moveAndClick(page, `#${id.like}`);
-                await (0, timer_1.timer)(1000);
+                await timer(1000);
                 if (id.totalLikes > 30) {
                     await this.moveMouseAndScroll(page, `#${id.comment}`, undefined, false, -700);
-                    await (0, timer_1.timer)(1000);
+                    await timer(1000);
                     await this.moveAndClick(page, `#${id.comment}`);
-                    await (0, timer_1.timer)(1000);
-                    await page.keyboard.type((0, lodash_1.shuffle)([
+                    await timer(1000);
+                    await page.keyboard.type(shuffle([
                         "Thank you for sharing",
                         "Great Share",
                         "Cool",
@@ -63,7 +60,7 @@ class LinkedinEngagementService extends linkedin_abstract_service_1.LinkedinAbst
                         "Great 👍",
                         "Awesome!!",
                     ])[0], { delay: 20 });
-                    await (0, timer_1.timer)(1000);
+                    await timer(1000);
                     await this.moveAndClick(page, ".comments-comment-box__submit-button");
                 }
             }
@@ -71,5 +68,4 @@ class LinkedinEngagementService extends linkedin_abstract_service_1.LinkedinAbst
         }
     }
 }
-exports.LinkedinEngagementService = LinkedinEngagementService;
 //# sourceMappingURL=linkedin.engagement.service.js.map

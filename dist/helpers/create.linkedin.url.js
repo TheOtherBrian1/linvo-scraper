@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.createLinkedinLink = void 0;
-const createLinkedinLink = (getLink, fullLinkedinUrl) => {
+export const createLinkedinLink = (getLink, fullLinkedinUrl) => {
     var _a;
     if (!getLink ||
         (getLink.indexOf('/in/') === -1 && getLink.indexOf('/sales/people/') === -1)) {
@@ -17,5 +14,4 @@ const createLinkedinLink = (getLink, fullLinkedinUrl) => {
     }
     return prepend + path;
 };
-exports.createLinkedinLink = createLinkedinLink;
 //# sourceMappingURL=create.linkedin.url.js.map

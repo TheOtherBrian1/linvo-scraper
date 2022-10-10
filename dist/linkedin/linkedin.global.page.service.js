@@ -1,13 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkedinGlobalPageService = void 0;
-const linkedin_abstract_service_1 = require("./linkedin.abstract.service");
-const linkedin_sales_page_service_1 = require("./linkedin.sales.page.service");
-const linkedin_page_service_1 = require("./linkedin.page.service");
-const querystring_1 = require("querystring");
-const normalPage = new linkedin_page_service_1.LinkedinPageService();
-const salesPage = new linkedin_sales_page_service_1.LinkedinSalesPageService();
-class LinkedinGlobalPageService extends linkedin_abstract_service_1.LinkedinAbstractService {
+import { LinkedinAbstractService } from "./linkedin.abstract.service";
+import { LinkedinSalesPageService } from "./linkedin.sales.page.service";
+import { LinkedinPageService } from "./linkedin.page.service";
+import { parse, stringify } from "querystring";
+const normalPage = new LinkedinPageService();
+const salesPage = new LinkedinSalesPageService();
+export class LinkedinGlobalPageService extends LinkedinAbstractService {
     async process(page, cdp, data) {
         const load = await this.startProcess(page, cdp, data);
         return Object.assign(Object.assign({}, load), { url: data.url });
@@ -21,7 +18,7 @@ class LinkedinGlobalPageService extends linkedin_abstract_service_1.LinkedinAbst
             };
         }
         const onlyQuery = new URL(url.replace("#", "?"));
-        const parseQuery = (0, querystring_1.parse)(onlyQuery.search);
+        const parseQuery = parse(onlyQuery.search);
         if (url.indexOf("https://linvo-premium-dev-bucket.s3.us-east-2.amazonaws.com") === 0 &&
             parseQuery.run === false) {
             return {
@@ -46,7 +43,7 @@ class LinkedinGlobalPageService extends linkedin_abstract_service_1.LinkedinAbst
         if (parseQuery === null || parseQuery === void 0 ? void 0 : parseQuery.viewAllFilters) {
             parseQuery === null || parseQuery === void 0 ? void 0 : parseQuery.viewAllFilters = "false";
         }
-        const newUrl = (0, querystring_1.stringify)(parseQuery, onlyQuery.origin +
+        const newUrl = stringify(parseQuery, onlyQuery.origin +
             onlyQuery.pathname +
             (url.indexOf("#") > -1 ? "#" : "?"));
         const info = await (url.indexOf("/sales/") > -1
@@ -77,5 +74,4 @@ class LinkedinGlobalPageService extends linkedin_abstract_service_1.LinkedinAbst
         ]);
     }
 }
-exports.LinkedinGlobalPageService = LinkedinGlobalPageService;
 //# sourceMappingURL=linkedin.global.page.service.js.map

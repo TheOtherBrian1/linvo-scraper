@@ -1,16 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkedinAbstractService = void 0;
-const messages_service_1 = require("../helpers/messages.service");
-const timer_1 = require("../helpers/timer");
-const linkedin_errors_1 = require("../enums/linkedin.errors");
-const capitalize_1 = require("../helpers/capitalize");
-class LinkedinAbstractService extends messages_service_1.MessagesService {
+import { MessagesService } from "../helpers/messages.service";
+import { randomIntFromInterval, timer } from "../helpers/timer";
+import { LINKEDIN_ERRORS, LinkedinErrors } from "../enums/linkedin.errors";
+import { capitalize } from "../helpers/capitalize";
+export class LinkedinAbstractService extends MessagesService {
     async extractEmail(page) {
         await page.waitForSelector(".artdeco-modal", {
             visible: true,
         });
-        await (0, timer_1.timer)(10000);
+        await timer(10000);
         const email = await page.evaluate(() => {
             var _a, _b;
             const modalText = (_b = (_a = document === null || document === void 0 ? void 0 : document.querySelector(".artdeco-modal")) === null || _a === void 0 ? void 0 : _a.textContent) === null || _b === void 0 ? void 0 : _b.trim();
@@ -78,14 +75,14 @@ class LinkedinAbstractService extends messages_service_1.MessagesService {
         try {
             await cur.moveTo({
                 y: pos.y + pos.height + offset,
-                x: (0, timer_1.randomIntFromInterval)(300, 1000),
+                x: randomIntFromInterval(300, 1000),
             });
             await page.mouse.wheel({
                 deltaY: pos.top + offset,
             });
         }
         catch (err) { }
-        await (0, timer_1.timer)(300);
+        await timer(300);
         if (!disabledMouseMove) {
             try {
                 await cur.move(selector, {
@@ -96,7 +93,7 @@ class LinkedinAbstractService extends messages_service_1.MessagesService {
             }
             catch (err) { }
         }
-        await (0, timer_1.timer)(1000);
+        await timer(1000);
     }
     static async checkLimit(page) {
         const options = [
@@ -167,14 +164,14 @@ class LinkedinAbstractService extends messages_service_1.MessagesService {
             return optionList.map((option) => (Object.assign(Object.assign({}, option), { char: body === null || body === void 0 ? void 0 : body.indexOf(option.char) })));
         }, options)).filter((f) => f.char && f.char !== -1);
         if (isLimitedReached.length) {
-            throw new linkedin_errors_1.LinkedinErrors(`We have postpone your account activity, We got from Linkedin ${isLimitedReached[0].message}`, undefined, { values: linkedin_errors_1.LINKEDIN_ERRORS.DELAY, more: isLimitedReached[0].delay });
+            throw new LinkedinErrors(`We have postpone your account activity, We got from Linkedin ${isLimitedReached[0].message}`, undefined, { values: LINKEDIN_ERRORS.DELAY, more: isLimitedReached[0].delay });
         }
     }
     static async checkToken(page) {
         const cookies = await page.cookies('https://www.linkedin.com');
         if ((cookies === null || cookies === void 0 ? void 0 : cookies.length) && !(cookies === null || cookies === void 0 ? void 0 : cookies.some(c => c.name === 'li_at'))) {
-            throw new linkedin_errors_1.LinkedinErrors("Your user have been disconnected", undefined, {
-                values: linkedin_errors_1.LINKEDIN_ERRORS.DISCONNECTED,
+            throw new LinkedinErrors("Your user have been disconnected", undefined, {
+                values: LINKEDIN_ERRORS.DISCONNECTED,
             });
         }
     }
@@ -242,7 +239,7 @@ class LinkedinAbstractService extends messages_service_1.MessagesService {
         await page.mouse.wheel({
             deltaY: -200,
         });
-        await (0, timer_1.timer)(3000);
+        await timer(3000);
         return info;
     }
     async moveAndClick(page, select, timeout, totalClicks) {
@@ -255,7 +252,7 @@ class LinkedinAbstractService extends messages_service_1.MessagesService {
             }, select.container);
         const gotSelector = "[Got Selector]".cyan() + " " + selector.blue();
         await page.waitForSelector(selector, { visible: true, timeout });
-        await (0, timer_1.timer)((0, timer_1.randomIntFromInterval)(200, 444));
+        await timer(randomIntFromInterval(200, 444));
         const elm = await page.$(selector);
         if (elm) {
             const pos = await elm.boundingBox();
@@ -293,12 +290,12 @@ class LinkedinAbstractService extends messages_service_1.MessagesService {
     }
     generateMessage(message, params) {
         return this.createMessage(message, [
-            { label: "name", value: (0, capitalize_1.capitalize)(params.firstName) },
-            { label: "last_name", value: (0, capitalize_1.capitalize)(params.lastName) },
-            { label: "lastname", value: (0, capitalize_1.capitalize)(params.lastName) },
-            { label: "myname", value: (0, capitalize_1.capitalize)(params.myname) },
-            { label: "mylastname", value: (0, capitalize_1.capitalize)(params.mylastname) },
-            { label: "mycompany", value: (0, capitalize_1.capitalize)(params.mycompany) },
+            { label: "name", value: capitalize(params.firstName) },
+            { label: "last_name", value: capitalize(params.lastName) },
+            { label: "lastname", value: capitalize(params.lastName) },
+            { label: "myname", value: capitalize(params.myname) },
+            { label: "mylastname", value: capitalize(params.mylastname) },
+            { label: "mycompany", value: capitalize(params.mycompany) },
             { label: "company", value: params.companyName },
         ]);
     }
@@ -313,7 +310,7 @@ class LinkedinAbstractService extends messages_service_1.MessagesService {
             });
         }
         catch (err) { }
-        await (0, timer_1.timer)(3000);
+        await timer(3000);
     }
     async selectContract(page) {
         try {
@@ -332,8 +329,7 @@ class LinkedinAbstractService extends messages_service_1.MessagesService {
         await page.waitForSelector(".initial-loading-state.hide-loading", {
             timeout: 300000,
         });
-        await (0, timer_1.timer)(3000);
+        await timer(3000);
     }
 }
-exports.LinkedinAbstractService = LinkedinAbstractService;
 //# sourceMappingURL=linkedin.abstract.service.js.map

@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkedinSalesPageService = void 0;
-const linkedin_abstract_service_1 = require("./linkedin.abstract.service");
-const timer_1 = require("../helpers/timer");
-class LinkedinSalesPageService extends linkedin_abstract_service_1.LinkedinAbstractService {
+import { LinkedinAbstractService } from "./linkedin.abstract.service";
+import { timer } from "../helpers/timer";
+export class LinkedinSalesPageService extends LinkedinAbstractService {
     globalError() {
         return {
             text: "Could not scrape pages",
@@ -129,12 +126,12 @@ class LinkedinSalesPageService extends linkedin_abstract_service_1.LinkedinAbstr
                 pages: 0,
             };
         }
-        await (0, timer_1.timer)(10000);
+        await timer(10000);
         for (let i = 1; i <= 7; i++) {
             await page.mouse.wheel({
                 deltaY: 400,
             });
-            await (0, timer_1.timer)(2000);
+            await timer(2000);
         }
         const values = await this.workOnResults(page);
         const deltaY = await page.evaluate(() => {
@@ -145,7 +142,7 @@ class LinkedinSalesPageService extends linkedin_abstract_service_1.LinkedinAbstr
         await page.mouse.wheel({
             deltaY,
         });
-        await (0, timer_1.timer)(5000);
+        await timer(5000);
         const pages = values.length
             ? await page.evaluate(() => {
                 var _a, _b;
@@ -168,7 +165,7 @@ class LinkedinSalesPageService extends linkedin_abstract_service_1.LinkedinAbstr
         }, scrollName);
         if (!findIt) {
             await this.moveMouseAndScroll(page, `[data-scroll-into-view="${scrollName}"], [id="${scrollName}"]`);
-            await (0, timer_1.timer)(1000);
+            await timer(1000);
             return this.scrollTo(page, scrollName, time + 1);
         }
         return true;
@@ -205,5 +202,4 @@ class LinkedinSalesPageService extends linkedin_abstract_service_1.LinkedinAbstr
         return arr.filter((f) => f.name && f.link);
     }
 }
-exports.LinkedinSalesPageService = LinkedinSalesPageService;
 //# sourceMappingURL=linkedin.sales.page.service.js.map

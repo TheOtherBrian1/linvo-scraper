@@ -1,19 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkedinConnectService = void 0;
-const linkedin_abstract_service_1 = require("./linkedin.abstract.service");
-const create_linkedin_url_1 = require("../helpers/create.linkedin.url");
-const gotoUrl_1 = require("../helpers/gotoUrl");
-const timer_1 = require("../helpers/timer");
-const linkedin_errors_1 = require("../enums/linkedin.errors");
-class LinkedinConnectService extends linkedin_abstract_service_1.LinkedinAbstractService {
+import { LinkedinAbstractService } from "./linkedin.abstract.service";
+import { createLinkedinLink } from "../helpers/create.linkedin.url";
+import { gotoUrl } from "../helpers/gotoUrl";
+import { timer } from "../helpers/timer";
+import { LinkedinErrors } from "../enums/linkedin.errors";
+export class LinkedinConnectService extends LinkedinAbstractService {
     async process(page, cdp, data) {
         const { message, url } = data;
-        const theUrl = (0, create_linkedin_url_1.createLinkedinLink)(url, true);
-        (0, gotoUrl_1.gotoUrl)(page, theUrl);
+        const theUrl = createLinkedinLink(url, true);
+        gotoUrl(page, theUrl);
         await this.waitForLoader(page);
         await page.waitForSelector(".pv-top-card--list > li, .pv-top-card__photo");
-        await (0, timer_1.timer)(3000);
+        await timer(3000);
         const pending = await page.$("button.pv-s-profile-actions--connect:disabled, .message-anywhere-button.artdeco-button--primary");
         const pending2 = await page.evaluate(() => {
             return !!Array.from(document.querySelectorAll("button")).find((p) => {
@@ -28,14 +25,14 @@ class LinkedinConnectService extends linkedin_abstract_service_1.LinkedinAbstrac
             });
         });
         if (pending || pending2) {
-            throw new linkedin_errors_1.LinkedinErrors("Connection is already pending");
+            throw new LinkedinErrors("Connection is already pending");
         }
         const info = await this.extractInformation(page);
         await this.clickConnectButton(page);
-        await (0, timer_1.timer)(3000);
+        await timer(3000);
         const email = await page.$("#email");
         if (email) {
-            throw new linkedin_errors_1.LinkedinErrors("Linkedin Prompt Email Verification");
+            throw new LinkedinErrors("Linkedin Prompt Email Verification");
         }
         try {
             await page.waitForSelector('.artdeco-pill-choice-group button', {
@@ -43,9 +40,9 @@ class LinkedinConnectService extends linkedin_abstract_service_1.LinkedinAbstrac
                 timeout: 3000
             });
             await this.moveAndClick(page, '.artdeco-pill-choice-group button:nth-child(1)');
-            await (0, timer_1.timer)(500);
+            await timer(500);
             await this.moveAndClick(page, ".artdeco-modal__actionbar > button:nth-child(1)");
-            await (0, timer_1.timer)(500);
+            await timer(500);
         }
         catch (err) { }
         if (message) {
@@ -58,7 +55,7 @@ class LinkedinConnectService extends linkedin_abstract_service_1.LinkedinAbstrac
             });
             if (total === 3) {
                 await this.moveAndClick(page, ".artdeco-modal__actionbar > button:nth-child(1)");
-                await (0, timer_1.timer)(500);
+                await timer(500);
             }
             await this.moveAndClick(page, ".artdeco-modal__actionbar > button:nth-child(1)");
             try {
@@ -107,12 +104,12 @@ class LinkedinConnectService extends linkedin_abstract_service_1.LinkedinAbstrac
             headline: info.headline,
             current_position_length: info.currentPositionLength,
             url: theUrl,
-            linkedin_id: (0, create_linkedin_url_1.createLinkedinLink)(newUrl, false),
+            linkedin_id: createLinkedinLink(newUrl, false),
         };
     }
     async connectMethod3(page) {
         await this.moveAndClick(page, ".pv-top-card button.artdeco-dropdown__trigger:not(:disabled)", 200);
-        await (0, timer_1.timer)(800);
+        await timer(800);
         await this.moveMouseAndScroll(page, '.pv-top-card [aria-label="Connect"], .pv-top-card div.pv-s-profile-actions--connect, .pv-top-card [data-control-name="connect"], .pv-top-card [type="connect-icon"]', 2000);
         await page.evaluate(() => {
             var _a;
@@ -164,5 +161,4 @@ class LinkedinConnectService extends linkedin_abstract_service_1.LinkedinAbstrac
         }
     }
 }
-exports.LinkedinConnectService = LinkedinConnectService;
 //# sourceMappingURL=linkedin.connect.service.js.map

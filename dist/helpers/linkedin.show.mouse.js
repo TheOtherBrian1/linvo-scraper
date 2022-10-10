@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.installMouseHelper = void 0;
-async function installMouseHelper(page) {
+export async function installMouseHelper(page) {
     await page.evaluateOnNewDocument(() => {
         if (window !== window.parent)
             return;
@@ -68,5 +65,4 @@ async function installMouseHelper(page) {
         }, false);
     });
 }
-exports.installMouseHelper = installMouseHelper;
 //# sourceMappingURL=linkedin.show.mouse.js.map

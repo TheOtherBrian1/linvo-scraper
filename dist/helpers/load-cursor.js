@@ -1,12 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const show_mouse_1 = require("./show.mouse");
-const ghost_cursor_1 = require("ghost-cursor");
+import { installMouseHelper } from "./show.mouse";
+import { createCursor } from 'ghost-cursor';
 const loadCursor = async (page, headless) => {
     if (!headless) {
-        await (0, show_mouse_1.installMouseHelper)(page);
+        await installMouseHelper(page);
     }
-    page.cursor = await (0, ghost_cursor_1.createCursor)(page);
+    page.cursor = await createCursor(page);
 };
-exports.default = loadCursor;
+export default loadCursor;
 //# sourceMappingURL=load-cursor.js.map

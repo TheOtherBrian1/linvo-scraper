@@ -1,11 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.MessagesService = void 0;
-const emoji_strip_1 = __importDefault(require("emoji-strip"));
-class MessagesService {
+import emojiStrip from 'emoji-strip';
+export class MessagesService {
     static _replace(content, name, value) {
         if (content.indexOf('{{') === -1) {
             return content;
@@ -32,10 +26,9 @@ class MessagesService {
     }
     async createMessage(message, params) {
         for (let param of params) {
-            message = MessagesService._replace(message, param.label, (0, emoji_strip_1.default)(param.value || ''));
+            message = MessagesService._replace(message, param.label, emojiStrip(param.value || ''));
         }
         return message.trim();
     }
 }
-exports.MessagesService = MessagesService;
 //# sourceMappingURL=messages.service.js.map

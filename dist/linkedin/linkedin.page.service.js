@@ -1,9 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkedinPageService = void 0;
-const linkedin_abstract_service_1 = require("./linkedin.abstract.service");
-const timer_1 = require("../helpers/timer");
-class LinkedinPageService extends linkedin_abstract_service_1.LinkedinAbstractService {
+import { LinkedinAbstractService } from "./linkedin.abstract.service";
+import { timer } from "../helpers/timer";
+export class LinkedinPageService extends LinkedinAbstractService {
     globalError() {
         return {
             text: "Could not scrape pages",
@@ -106,16 +103,16 @@ class LinkedinPageService extends linkedin_abstract_service_1.LinkedinAbstractSe
         await page.waitForSelector(`.actor-name, .discover-person-card__name, .entity-result__title-text [data-control-name="entity_result"], .entity-result__title-text`, {
             timeout: 5000,
         });
-        await (0, timer_1.timer)(10000);
+        await timer(10000);
         const elements = await this.elements(page, 1);
-        await (0, timer_1.timer)(200);
+        await timer(200);
         const deltaY = await page.evaluate(() => {
             return document.body.scrollHeight;
         });
         await page.mouse.wheel({
             deltaY,
         });
-        await (0, timer_1.timer)(3000);
+        await timer(3000);
         const pages = !elements.length
             ? null
             : await page.evaluate(() => {
@@ -129,5 +126,4 @@ class LinkedinPageService extends linkedin_abstract_service_1.LinkedinAbstractSe
         };
     }
 }
-exports.LinkedinPageService = LinkedinPageService;
 //# sourceMappingURL=linkedin.page.service.js.map

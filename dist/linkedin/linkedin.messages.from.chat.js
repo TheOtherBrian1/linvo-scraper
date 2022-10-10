@@ -1,18 +1,12 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkedinMessagesFromChat = void 0;
-const linkedin_abstract_service_1 = require("./linkedin.abstract.service");
-const sentiment_1 = __importDefault(require("sentiment"));
-const lodash_1 = require("lodash");
-const gotoUrl_1 = require("../helpers/gotoUrl");
-const timer_1 = require("../helpers/timer");
-const analyzer = new sentiment_1.default();
-class LinkedinMessagesFromChat extends linkedin_abstract_service_1.LinkedinAbstractService {
+import { LinkedinAbstractService } from "./linkedin.abstract.service";
+import Sentiment from "sentiment";
+import { shuffle } from "lodash";
+import { gotoUrl } from "../helpers/gotoUrl";
+import { timer } from "../helpers/timer";
+const analyzer = new Sentiment();
+export class LinkedinMessagesFromChat extends LinkedinAbstractService {
     async process(page) {
-        (0, gotoUrl_1.gotoUrl)(page, "https://www.linkedin.com/messaging/");
+        gotoUrl(page, "https://www.linkedin.com/messaging/");
         await this.waitForLoader(page);
         return this.continueGetAllMessagesFromChat(page);
     }
@@ -86,7 +80,7 @@ class LinkedinMessagesFromChat extends linkedin_abstract_service_1.LinkedinAbstr
         }
         const current = idList.shift();
         await this.moveAndClick(page, `#${current} .msg-conversation-card__body-row`);
-        await (0, timer_1.timer)(2000);
+        await timer(2000);
         const load = await this.getMessagesList(page, name);
         return [
             ...((load === null || load === void 0 ? void 0 : load.id)
@@ -120,7 +114,7 @@ class LinkedinMessagesFromChat extends linkedin_abstract_service_1.LinkedinAbstr
             visible: true,
         });
         const visibility = await this.totalVisibleElement(page);
-        const all = (0, lodash_1.shuffle)((await page.evaluate((vis) => {
+        const all = shuffle((await page.evaluate((vis) => {
             return Array.from(document.querySelectorAll(".msg-conversations-container__conversations-list > li:not(:empty):not(.msg-conversation-card--occluded)"))
                 .map((f) => ({
                 id: f.getAttribute("id"),
@@ -141,5 +135,4 @@ class LinkedinMessagesFromChat extends linkedin_abstract_service_1.LinkedinAbstr
         return (await this.nextPerson(page, all, "", language)).filter((f) => (f === null || f === void 0 ? void 0 : f.name) && (f === null || f === void 0 ? void 0 : f.list.length));
     }
 }
-exports.LinkedinMessagesFromChat = LinkedinMessagesFromChat;
 //# sourceMappingURL=linkedin.messages.from.chat.js.map
